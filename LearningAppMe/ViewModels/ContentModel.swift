@@ -9,16 +9,20 @@ import Foundation
 
 class ContentModel: ObservableObject {
     
-    @Published var Modules = [Module]()
-    
-    var htmlData: Data?
-    
+    @Published var modules = [Module]()
+    @Published var currentModule: Module?
+        
+    var styleData: Data?
+    var currentModuleIndex = 0
+
     init() {
         
         getLocalData()
+//        getModule(moduleId: <#T##Int#>)
         
     }
     
+    //MARK: - Data Methods
     func getLocalData() {
         
         //this is how i did it before(it returns a string), this time i will make it into a URL right from the start
@@ -39,7 +43,7 @@ class ContentModel: ObservableObject {
                 
                 let modules = try decoder.decode([Module].self, from: data)
                 
-                self.Modules = modules
+                self.modules = modules
                 
             } catch {
                 print("decoder error, \(error)")
@@ -51,11 +55,25 @@ class ContentModel: ObservableObject {
         do {
             
             let data = try Data(contentsOf: htmlUrl)
-            self.htmlData = data
+            styleData = data
             
         } catch {
             print("html error, \(error)")
         }
+    }
+    
+    //MARK: - Module Navigation
+    func getModule(moduleId: Int) {
         
+        for i in 0..<modules.count {
+            
+//            moduleId is zero based so the moduleId should always match the modules array index, so you could just use the moduleId to set the module's index like this, modules[moduleId], and it should line up
+            if modules[i].id == moduleId {
+//                here you could also just set the module's array to the i like this, modules[i] and skip the currentModuleIndex var altogether
+                currentModuleIndex = i
+                break
+            }
+        }
+        currentModule = modules[currentModuleIndex]
     }
 }
