@@ -13,7 +13,7 @@ struct HomeView: View {
     
     var body: some View {
         
-        NavigationView() {
+        NavigationStack() {
             
             VStack(alignment: .leading, spacing: 30) {
                 
@@ -26,6 +26,14 @@ struct HomeView: View {
                         ForEach(model.modules) { module in
                             
                             VStack(spacing: 20) {
+                                
+                                NavigationLink("chale", tag: module.id, selection: $model.currentContentSelected) {
+                                    ContentView()
+                                        .onAppear {
+                                            model.getModule(moduleId: module.id)
+                                        }
+                                }
+                                
                                 
                                 NavigationLink {
                                     ContentView()
@@ -46,6 +54,8 @@ struct HomeView: View {
             }
             .navigationTitle("Get Started")
         }
+//        .navigationViewStyle(.stack)
+        
     }
 }
 

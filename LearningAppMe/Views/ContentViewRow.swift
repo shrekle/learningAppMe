@@ -43,7 +43,7 @@ struct ContentViewRow: View {
 //struct ContentViewRow_Previews: PreviewProvider {
 //    static var previews: some View {
 //
-//        ContentViewRow(lesson: ContentModel().modules[0].content.lessons[0])
+//        ContentViewRow(lesson: ContentModel().modules[0].content.lessons[0], index: <#Int#>)
 //            .environmentObject(ContentModel())
 //    }
 //}

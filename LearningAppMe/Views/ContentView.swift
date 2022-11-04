@@ -15,18 +15,27 @@ struct ContentView: View {
         
         ScrollView {
             LazyVStack{
-                
                 VStack(spacing: 10) {
+                    
                 if model.currentModule != nil {
-                    ForEach(0..<model.currentModule!.content.lessons.count) { i in
+                    
+                    ForEach(0..<model.currentModule!.content.lessons.count, id: \.self) { i in
                         
-                        ContentViewRow(index: i)
-                            .frame(height: 100)
+                        NavigationLink {
+                            ContentDetailView()
+                                .onAppear {  //make sure stupid .onappears have a trailing closure, if not they dont work
+                                    model.getLesson(lessonIndex: i)
+                                }
+                        } label: {
+                            ContentViewRow(index: i)
+                                .frame(height: 100)
+                        }
                     }
                 }
             }
         }
             .padding(.horizontal)
+            .tint(.black)
         }
         
     }
