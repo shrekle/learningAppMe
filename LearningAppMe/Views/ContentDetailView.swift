@@ -30,15 +30,25 @@ struct ContentDetailView: View {
                 Button {
                     model.goToNextLesson()
                 } label: {
-                    
                     ZStack {
-                        Rectangle()
-                            .foregroundColor(.green)
+                        RectangleCard(color: .green)
                             .frame(height: 48)
-                            .cornerRadius(10)
-                            .shadow(radius: 5)
                         
                         Text("Next Lesson: \(model.currentModule!.content.lessons[model.currentLessonIndex + 1].title)")
+                            .foregroundColor(.white)
+                            .bold()
+                    }
+                }
+            }
+            else {
+                Button {
+                    model.path = NavigationPath()
+                } label: {
+                    ZStack {
+                        RectangleCard(color: .green)
+                            .frame(height: 48)
+                        
+                        Text("Complete")
                             .foregroundColor(.white)
                             .bold()
                     }

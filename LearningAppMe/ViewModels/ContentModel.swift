@@ -4,7 +4,7 @@
 //
 //  Created by adrian garcia on 10/24/22.
 //
-
+import SwiftUI
 import Foundation
 
 class ContentModel: ObservableObject {
@@ -14,6 +14,7 @@ class ContentModel: ObservableObject {
     @Published var currentLesson: Lesson?
     @Published var currentContentSelected: Int?
     @Published var currentDescription = NSAttributedString()
+    @Published var path = NavigationPath()
     
         
     var styleData: Data?
@@ -106,7 +107,7 @@ class ContentModel: ObservableObject {
     }
     
     func hasNextLesson()-> Bool {
-        return (currentLessonIndex + 1 < currentModule!.content.lessons.count)
+        return (currentLessonIndex + 1 < currentModule?.content.lessons.count ?? 0)
     }
     
     //MARK: - Code Styling

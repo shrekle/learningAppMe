@@ -17,23 +17,33 @@ struct ContentView: View {
             LazyVStack{
                 VStack(spacing: 10) {
                     
-                if model.currentModule != nil {
-                    
-                    ForEach(0..<model.currentModule!.content.lessons.count, id: \.self) { i in
+                    if model.currentModule != nil {
                         
-                        NavigationLink {
-                            ContentDetailView()
-                                .onAppear {  //make sure stupid .onappears have a trailing closure, if not they dont work
-                                    model.getLesson(lessonIndex: i)
-                                }
-                        } label: {
-                            ContentViewRow(index: i)
-                                .frame(height: 100)
+                        ForEach(0..<model.currentModule!.content.lessons.count, id: \.self) { i in
+                            
+                            NavigationLink(value: i) {
+                                ContentViewRow(index: i)
+                                    .frame(height: 100)
+                            }
+                            //                        NavigationLink {
+                            //                            ContentDetailView()
+                            //                                .onAppear {  //make sure stupid .onappears have a trailing closure, if not they dont work
+                            //                                    model.getLesson(lessonIndex: i)
+                            //                                }
+                            //                        } label: {
+                            //                            ContentViewRow(index: i)
+                            //                                .frame(height: 100)
+                            //                        }
                         }
                     }
                 }
+                .navigationDestination(for: Int.self) { i in
+                    ContentDetailView()
+                        .onAppear {  //make sure stupid .onappears have a trailing closure, if not they dont work
+                            model.getLesson(lessonIndex: i)
+                        }
+                }
             }
-        }
             .padding(.horizontal)
             .tint(.black)
         }
