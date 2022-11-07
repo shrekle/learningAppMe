@@ -27,23 +27,29 @@ struct HomeView: View {
                             
                             VStack(spacing: 20) {
                                 
-                                NavigationLink(value: module) {
+                                NavigationLink(value: module.content) {
                                     
                                     HomeViewRow(image: module.content.image, title: "Learn \(module.category)", description: module.content.description, lessonCount: "\(module.content.lessons.count) Lessons", time: module.content.time)
                                 }
-                                .onAppear {
-                                    model.getModule(moduleId: module.id)
-                                }                  
-
+                            }
+                            .onAppear {
+                                model.getModule(moduleId: module.id)
+                            }
+                            NavigationLink(value: module.test) {
                                 HomeViewRow(image: module.test.image, title: "\(module.category)", description: module.test.description, lessonCount: "\(module.test.questions.count) Questions", time: module.test.time)
                             }
+                          
                         }
-                        .padding(.horizontal)
                     }
-                    .tint(.black)
-                    .navigationDestination(for: Module.self) { id in
-                        ContentView()
-                    }
+                    .padding(.horizontal)
+                }
+                .tint(.black)
+                .navigationDestination(for: Content.self) { content in
+                    ContentView()
+                    
+                }
+                .navigationDestination(for: Test.self) { test in
+                    TestView()
                 }
             }
             .navigationTitle("Get Started")
@@ -51,7 +57,10 @@ struct HomeView: View {
         
     }
 }
-
+enum NavLink: Hashable {
+    case contentView
+    case testView
+}
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()

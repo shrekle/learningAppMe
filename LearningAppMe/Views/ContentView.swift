@@ -25,24 +25,17 @@ struct ContentView: View {
                                 ContentViewRow(index: i)
                                     .frame(height: 100)
                             }
-                            //                        NavigationLink {
-                            //                            ContentDetailView()
-                            //                                .onAppear {  //make sure stupid .onappears have a trailing closure, if not they dont work
-                            //                                    model.getLesson(lessonIndex: i)
-                            //                                }
-                            //                        } label: {
-                            //                            ContentViewRow(index: i)
-                            //                                .frame(height: 100)
-                            //                        }
                         }
+                        .navigationDestination(for: Int.self) { i in
+                            ContentDetailView()
+                                .onAppear {  //make sure stupid .onappears have a trailing closure, if not they dont work
+                                    model.getLesson(lessonIndex: i)
+                                }
                     }
-                }
-                .navigationDestination(for: Int.self) { i in
-                    ContentDetailView()
-                        .onAppear {  //make sure stupid .onappears have a trailing closure, if not they dont work
-                            model.getLesson(lessonIndex: i)
+                        
                         }
                 }
+                
             }
             .padding(.horizontal)
             .tint(.black)

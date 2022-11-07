@@ -25,6 +25,13 @@ class ContentModel: ObservableObject {
         getLocalData()
     }
     
+    //MARK: - NavLink
+    
+    enum NavLink: Hashable {
+        case contentView
+        case testView
+    }
+    
     //MARK: - Data Methods
     func getLocalData() {
         
@@ -70,7 +77,6 @@ class ContentModel: ObservableObject {
         for i in 0..<modules.count {
 //            moduleId is zero based so the moduleId should always match the modules array index, so you could just use the moduleId to set the module's index like this, modules[moduleId], and it should line up
             if modules[i].id == moduleId {
-//                here you could also just set the module's array to the i like this, modules[i] and skip the currentModuleIndex var altogether
                 currentModuleIndex = i
                 break
             }
