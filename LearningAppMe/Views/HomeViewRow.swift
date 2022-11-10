@@ -58,7 +58,6 @@ struct HomeViewRow: View {
             .padding(10)
         }
         .aspectRatio(CGSize(width: 375, height: 175), contentMode: .fit)
-
     }
 }
 

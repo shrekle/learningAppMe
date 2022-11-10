@@ -13,23 +13,20 @@ class ContentModel: ObservableObject {
     @Published var currentModule: Module?
     @Published var currentLesson: Lesson?
     @Published var currentContentSelected: Int?
-    @Published var currentDescription = NSAttributedString()
+    @Published var currentTestSelected: Int?
+    @Published var currentQuestion: Question?
+    @Published var codeText = NSAttributedString()
+
     @Published var path = NavigationPath()
     
         
     var styleData: Data?
     var currentModuleIndex = 0
     var currentLessonIndex = 0
+    var currentQuestionIndex = 0
 
     init() {
         getLocalData()
-    }
-    
-    //MARK: - NavLink
-    
-    enum NavLink: Hashable {
-        case contentView
-        case testView
     }
     
     //MARK: - Data Methods
@@ -75,7 +72,7 @@ class ContentModel: ObservableObject {
     func getModule(moduleId: Int) {
         
         for i in 0..<modules.count {
-//            moduleId is zero based so the moduleId should always match the modules array index, so you could just use the moduleId to set the module's index like this, modules[moduleId], and it should line up
+           
             if modules[i].id == moduleId {
                 currentModuleIndex = i
                 break
@@ -94,7 +91,17 @@ class ContentModel: ObservableObject {
         }
         
         currentLesson = currentModule!.content.lessons[currentLessonIndex]
-        currentDescription =  addStyling(currentLesson!.explanation)
+        codeText =  addStyling(currentLesson!.explanation)
+    }
+    
+    func getTest(moduleId: Int) {
+        
+        getModule(moduleId: moduleId)
+        
+        if currentModule?.test.questions.count ?? 0 > 0 {
+            currentQuestion = currentModule?.test.questions[currentQuestionIndex]
+            codeText = addStyling(currentQuestion?.content ?? "")
+        }
     }
     
     func goToNextLesson() {
@@ -103,7 +110,7 @@ class ContentModel: ObservableObject {
         
         if currentLessonIndex < currentModule!.content.lessons.count {
             currentLesson = currentModule!.content.lessons[currentLessonIndex]
-            currentDescription = addStyling(currentLesson!.explanation)
+            codeText = addStyling(currentLesson!.explanation)
 
         } else {
             currentLessonIndex = 0

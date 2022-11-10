@@ -22,15 +22,15 @@ struct CodeTextView: UIViewRepresentable {
     }
     
     func updateUIView(_ textView: UITextView, context: Context) {
-        textView.attributedText = model.currentDescription
+        textView.attributedText = model.codeText
         
         //set animated to false if yo get wierd behavior when clicking next lesson while its auto sctolling to the top of the scrollview
         textView.scrollRectToVisible(CGRect(x: 0, y: 0, width: 1, height: 1), animated: true)
     }
 }
 
-struct CodeTextView_Previews: PreviewProvider {
-    static var previews: some View {
-        CodeTextView()
-    }
-}
+//struct CodeTextView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        CodeTextView()
+//    }
+//}

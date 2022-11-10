@@ -26,21 +26,19 @@ struct ContentView: View {
                                     .frame(height: 100)
                             }
                         }
-                        .navigationDestination(for: Int.self) { i in
-                            ContentDetailView()
-                                .onAppear {  //make sure stupid .onappears have a trailing closure, if not they dont work
-                                    model.getLesson(lessonIndex: i)
-                                }
                     }
-                        
-                        }
                 }
-                
             }
-            .padding(.horizontal)
-            .tint(.black)
+            
         }
-        
+        .padding(.horizontal)
+        .tint(.black)
+        .navigationDestination(for: Int.self) { i in
+            ContentDetailView()
+                .onAppear {  //make sure stupid .onappears have a trailing closure, if not they dont work
+                    model.getLesson(lessonIndex: i)
+                }
+        }
     }
 }
 

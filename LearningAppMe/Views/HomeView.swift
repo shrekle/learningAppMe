@@ -12,7 +12,7 @@ struct HomeView: View {
     @EnvironmentObject var model: ContentModel
     
     var body: some View {
-        
+
         NavigationStack(path: $model.path) {
             
             VStack(alignment: .leading, spacing: 30) {
@@ -26,41 +26,41 @@ struct HomeView: View {
                         ForEach(model.modules) { module in
                             
                             VStack(spacing: 20) {
-                                
+
                                 NavigationLink(value: module.content) {
-                                    
+
                                     HomeViewRow(image: module.content.image, title: "Learn \(module.category)", description: module.content.description, lessonCount: "\(module.content.lessons.count) Lessons", time: module.content.time)
+                                        .padding(.top)
+                                }
+                                
+                                NavigationLink(value: module.test) {
+                                    HomeViewRow(image: module.test.image, title: "\(module.category)", description: module.test.description, lessonCount: "\(module.test.questions.count) Questions", time: module.test.time)
                                 }
                             }
-                            .onAppear {
-                                model.getModule(moduleId: module.id)
+                            .navigationDestination(for: Content.self) { content in
+                                ContentView()
+                                    .onAppear {
+                                        model.getModule(moduleId: module.id)
+                                    }
                             }
-                            NavigationLink(value: module.test) {
-                                HomeViewRow(image: module.test.image, title: "\(module.category)", description: module.test.description, lessonCount: "\(module.test.questions.count) Questions", time: module.test.time)
+                            .navigationDestination(for: Test.self) { test in
+                                TestView()
+                                    .onAppear {
+                                        model.getTest(moduleId: module.id)
+                                    }
                             }
-                          
                         }
                     }
                     .padding(.horizontal)
                 }
                 .tint(.black)
-                .navigationDestination(for: Content.self) { content in
-                    ContentView()
-                    
-                }
-                .navigationDestination(for: Test.self) { test in
-                    TestView()
-                }
             }
             .navigationTitle("Get Started")
         }
         
     }
 }
-enum NavLink: Hashable {
-    case contentView
-    case testView
-}
+
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()

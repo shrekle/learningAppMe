@@ -118,9 +118,9 @@
 				CA4649A6290A23B50031F125 /* ContentView.swift */,
 				CA4649A8290AEED00031F125 /* ContentViewRow.swift */,
 				CA66508E290B42F600E2FF3E /* ContentDetailView.swift */,
+				CA33F7CC291972F400B40D37 /* TestView.swift */,
 				CA33F7722911D16300B40D37 /* CodeTextView.swift */,
 				CA33F7AE2915875800B40D37 /* RectangleCard.swift */,
-				CA33F7CC291972F400B40D37 /* TestView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";

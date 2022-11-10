@@ -14,7 +14,7 @@ struct ContentViewRow: View {
     
     var body: some View {
         
-        var lesson = model.currentModule?.content.lessons[index]
+        let lesson = model.currentModule?.content.lessons[index]
         
         ZStack(alignment: .leading) {
             Rectangle()
@@ -37,6 +37,7 @@ struct ContentViewRow: View {
             .padding()
         }
         .navigationTitle("Learn \(model.currentModule?.category ?? "")")
+        .padding(.horizontal, 10)
     }
 }
 
