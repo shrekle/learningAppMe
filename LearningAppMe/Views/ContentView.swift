@@ -29,7 +29,6 @@ struct ContentView: View {
                     }
                 }
             }
-            
         }
         .padding(.horizontal)
         .tint(.black)

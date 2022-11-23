@@ -66,18 +66,28 @@ struct TestView: View {
                         .padding(.vertical)
                     }
                     
+                    
                     // submit button
                     Button {
-                        submitted = true
-                        if selectedAnswerIndex == model.currentQuestion!.correctIndex {
-                            numCorrect += 1
+                        
+                        if submitted {
+                            model.nextQuestion()
+                            submitted = false
+                            selectedAnswerIndex = nil
                         }
+                        else {
+                            submitted = true
+                            if selectedAnswerIndex == model.currentQuestion!.correctIndex {
+                                numCorrect += 1
+                            }
+                        }
+                        
                     } label: {
                         ZStack {
                             RectangleCard(color: .green)
                                 .frame(height: 48)
                             
-                            Text("Submit")
+                            Text(buttonText)
                                 .tint(.white)
                                 .bold()
                         }
@@ -87,12 +97,27 @@ struct TestView: View {
                 }
             }
             else {
-                ProgressView()
+//                ProgressView()
+                TestResultView(numCorrect: numCorrect)
             }
         }
         .padding(.horizontal)
         .navigationTitle("\(model.currentModule?.category ?? "") Test")
     }
+    
+    var buttonText: String {
+        if submitted {
+            if model.currentQuestionIndex + 1 == model.currentModule?.test.questions.count {
+                return "Finish"
+            } else {
+                return "Next"
+            }
+        }
+        else {
+            return "Submitt"
+        }
+    }
+    
 }
 
 struct TestView_Previews: PreviewProvider {

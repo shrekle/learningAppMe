@@ -10,20 +10,31 @@ import Foundation
 class ContentModel: ObservableObject {
     
     @Published var modules = [Module]()
+    
+//current module
     @Published var currentModule: Module?
+    var currentModuleIndex = 0
+    
+// current lesson
     @Published var currentLesson: Lesson?
+    var currentLessonIndex = 0
+    
+// current question
+    @Published var currentQuestion: Question?
+    var currentQuestionIndex = 0
+    
+// current lesson explanation
+    @Published var codeText = NSAttributedString()
+    var styleData: Data?
+    
+// current selected content and test
     @Published var currentContentSelected: Int?
     @Published var currentTestSelected: Int?
-    @Published var currentQuestion: Question?
-    @Published var codeText = NSAttributedString()
-
+    
+// navigation stack
     @Published var path = NavigationPath()
     
         
-    var styleData: Data?
-    var currentModuleIndex = 0
-    var currentLessonIndex = 0
-    var currentQuestionIndex = 0
 
     init() {
         getLocalData()
@@ -121,6 +132,24 @@ class ContentModel: ObservableObject {
     
     func hasNextLesson()-> Bool {
         return (currentLessonIndex + 1 < currentModule?.content.lessons.count ?? 0)
+    }
+    
+    func nextQuestion() {
+        // advance the question index
+        currentQuestionIndex += 1
+        
+        // check that its within the range of questions
+        if currentQuestionIndex < currentModule!.test.questions.count {
+            currentQuestion = currentModule!.test.questions[currentQuestionIndex]
+            codeText = addStyling(currentQuestion!.content)
+        }
+        
+        // if not then reset then properties
+        else {
+            currentQuestionIndex = 0
+            currentQuestion = nil
+        }
+        
     }
     
     //MARK: - Code Styling
