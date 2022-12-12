@@ -11,32 +11,31 @@ class ContentModel: ObservableObject {
     
     @Published var modules = [Module]()
     
-//current module
+    //current module
     @Published var currentModule: Module?
     var currentModuleIndex = 0
     
-// current lesson
+    // current lesson
     @Published var currentLesson: Lesson?
     var currentLessonIndex = 0
     
-// current question
+    // current question
     @Published var currentQuestion: Question?
     var currentQuestionIndex = 0
     
-// current lesson explanation
+    // current lesson explanation
     @Published var codeText = NSAttributedString()
     var styleData: Data?
     
-// current selected content and test
+    // current selected content and test
     @Published var currentContentSelected: Int?
     @Published var currentTestSelected: Int?
     
-// navigation stack
+    // navigation stack
     @Published var path = NavigationPath()
     
-        
-
     init() {
+        getRemoteData()
         getLocalData()
     }
     
@@ -44,7 +43,7 @@ class ContentModel: ObservableObject {
     func getLocalData() {
         
         //this is how i did it before(it returns a string), this time i will make it into a URL right from the start
-//        let pathString = Bundle.main.path(forResource: "data", ofType: ":json")
+        //        let pathString = Bundle.main.path(forResource: "data", ofType: ":json")
         let decoder = JSONDecoder()
         let jsonUrl = Bundle.main.url(forResource: "data", withExtension: "json")
         guard let jsonUrl else {return print("json bundle not working")}
@@ -79,12 +78,64 @@ class ContentModel: ObservableObject {
         }
     }
     
+    func getRemoteData() {
+        
+        let urlString = "https://shrekle.github.io/learningApp-Data/data2.json"
+        
+        let url = URL(string: urlString)
+        
+        guard url != nil else {return}
+        
+        let request = URLRequest(url: url!)
+        
+        let session = URLSession.shared
+        
+        let dataTask = session.dataTask(with: request) {(data, urlResponse, error) in
+            
+            guard error == nil else {
+                return
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                
+                let modules = try decoder.decode([Module].self, from: data!)
+                DispatchQueue.main.async {
+                    self.modules += modules
+                }
+            } catch {
+                print(error)
+            }
+        }
+        
+        dataTask.resume()
+        
+        // can be done this way without the request....straight with the url
+        //        session.dataTask(with: url) { Data, URLResponse, error in
+        //
+        //        }
+        
+    }
+    
     //MARK: - Module Navigation
+    func figureThisOut(module: Module) {
+        print(module.id)
+        if currentModule != nil {
+            print(currentModule)
+        } else {
+            print("MOUDLE NOT SET YET!!!")
+        }
+       
+    }
+    
     func getModule(moduleId: Int) {
         
         for i in 0..<modules.count {
-           
+            
             if modules[i].id == moduleId {
+                print(" moduleId \(moduleId)")
+                print(" the count, \(modules.count)")
+
                 currentModuleIndex = i
                 break
             }
@@ -122,7 +173,7 @@ class ContentModel: ObservableObject {
         if currentLessonIndex < currentModule!.content.lessons.count {
             currentLesson = currentModule!.content.lessons[currentLessonIndex]
             codeText = addStyling(currentLesson!.explanation)
-
+            
         } else {
             currentLessonIndex = 0
             currentLesson = nil
@@ -158,14 +209,14 @@ class ContentModel: ObservableObject {
         
         var resultString = NSAttributedString()
         var data = Data()
-//        add styling data
+        //        add styling data
         if styleData != nil {
             data.append(styleData!)
         }
-//        add HTML data
+        //        add HTML data
         data.append(Data(htmlstring.utf8))
-
-//        convert to attributed string
+        
+        //        convert to attributed string
         if let attributedString = try? NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil) {
             resultString = attributedString
         }

@@ -97,7 +97,7 @@ struct TestView: View {
                 }
             }
             else {
-//                ProgressView()
+                ProgressView()
                 TestResultView(numCorrect: numCorrect)
             }
         }

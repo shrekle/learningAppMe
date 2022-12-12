@@ -26,23 +26,26 @@ struct HomeView: View {
                         ForEach(model.modules) { module in
                             
                             VStack(spacing: 20) {
-
+                               
                                 NavigationLink(value: module.content) {
 
                                     HomeViewRow(image: module.content.image, title: "Learn \(module.category)", description: module.content.description, lessonCount: "\(module.content.lessons.count) Lessons", time: module.content.time)
-                                        .padding(.top)
-                                }
+                                        .padding(.top, 12)
+                                }.onAppear(perform: {
+                                    model.figureThisOut(module: module)
+                                })
+                                .navigationDestination(for: Content.self) { _ in
+                                    ContentView()
+                                        .onAppear {
+                                            model.getModule(moduleId: module.id)
+                                        }
+                                } 
                                 
                                 NavigationLink(value: module.test) {
                                     HomeViewRow(image: module.test.image, title: "\(module.category)", description: module.test.description, lessonCount: "\(module.test.questions.count) Questions", time: module.test.time)
                                 }
                             }
-                            .navigationDestination(for: Content.self) { content in
-                                ContentView()
-                                    .onAppear {
-                                        model.getModule(moduleId: module.id)
-                                    }
-                            }
+                            
                             .navigationDestination(for: Test.self) { test in
                                 TestView()
                                     .onAppear {
@@ -50,6 +53,7 @@ struct HomeView: View {
                                     }
                             }
                         }
+                        
                     }
                     .padding(.horizontal)
                 }
